@@ -11,7 +11,7 @@ def menu_list(request):
     all_menus = Menu.objects.all()
     menus = []
     for menu in all_menus:
-        if menu.expiration_date >= timezone.now():
+        if menu.expiration_date is not None and menu.expiration_date >= timezone.now():
             menus.append(menu)
 
     menus = sorted(menus, key=attrgetter('expiration_date'))
@@ -22,7 +22,7 @@ def menu_detail(request, pk):
     return render(request, 'menu/menu_detail.html', {'menu': menu})
 
 def item_detail(request, pk):
-    try: 
+    try:
         item = Item.objects.get(pk=pk)
     except ObjectDoesNotExist:
         raise Http404
